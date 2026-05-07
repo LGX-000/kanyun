@@ -396,7 +396,7 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
       <p class="vip-desc">十年大运 · 流年详解 · 运势曲线 · 阶段分析</p>
       <div class="vip-price">1.00</div>
 
-      <p class="vip-scan-hint">前往爱发电赞助页面，支持微信/支付宝</p>
+      <p class="vip-scan-hint">前往爱发电完成支付，付款后返回解锁</p>
       <button class="vip-pay-btn" id="goPayBtn" onclick="goToPay()">去支付</button>
       <button class="vip-pay-btn" id="unlockBtn" style="display:none" onclick="redeemCodeDirect()">✓ 已完成支付，立即解锁</button>
       <p class="vip-hint" id="vipHint">点击「去支付」跳转爱发电付款，付完返回即可解锁</p>
@@ -457,7 +457,7 @@ function goToPay() {
   document.getElementById('goPayBtn').style.display = 'none';
   document.getElementById('vipHint').textContent = '支付完成后返回本页面即可解锁';
   document.getElementById('vipHint').className = 'vip-hint';
-  window.open('https://afdian.com/a/%E5%B7%B1%E5%BA%9A', '_blank');
+  window.open('https://ifdian.net/item/394705be496111f1957252540025c377', '_blank');
 }
 // 监听页面可见性变化：用户从微信返回后显示解锁按钮
 document.addEventListener('visibilitychange', function() {
