@@ -173,6 +173,11 @@ table.elem-table th{color:var(--text2);font-weight:400;font-size:.72rem}
 .vip-step{display:flex;align-items:center;gap:10px;font-size:.75rem;color:var(--text);margin-bottom:6px;line-height:1.4}
 .vip-step span{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center}
 footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
+.qr-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);justify-content:center;align-items:center;flex-direction:column}
+.qr-modal.show{display:flex}
+.qr-modal img{width:85vw;max-width:500px;border-radius:16px;border:3px solid #fff}
+.qr-modal p{margin-top:18px;color:#fff;font-size:.9rem;text-align:center;line-height:1.5}
+.qr-modal .qr-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
 @media(max-width:480px){
   .app{padding:12px 10px 60px}
@@ -399,10 +404,10 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
       <p class="vip-desc">十年大运 · 流年详解 · 运势曲线 · 阶段分析</p>
       <div class="vip-price">0.99</div>
 
-      <img class="vip-qr" id="vipQR" src="收款码.png" alt="微信收款码" />
+      <img class="vip-qr" id="vipQR" src="收款码.png" alt="微信收款码" onclick="showQRModal()" style="cursor:pointer" />
 	      <p class="vip-scan-hint">微信扫一扫付款，无需注册验证</p>
 	      <div class="vip-steps">
-	        <div class="vip-step"><span>1</span>截屏保存上方二维码</div>
+	        <div class="vip-step"><span>1</span>点击上方二维码，长按保存图片</div>
 	        <div class="vip-step"><span>2</span>打开微信扫一扫，从相册选图</div>
 	        <div class="vip-step"><span>3</span>支付 ¥0.99 后返回本页面</div>
 	      </div>
@@ -418,6 +423,11 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
   </div></div><!-- end vipContent -->
 </div><!-- end page3 -->
 <footer>命理之说，仅供娱乐参考 · 节气计算近似，±1日误差</footer>
+<div class="qr-modal" id="qrModal" onclick="hideQRModal()">
+  <button class="qr-close" onclick="event.stopPropagation();hideQRModal()">✕</button>
+  <img src="收款码.png" alt="微信收款码" />
+  <p>长按图片 → 保存到相册<br>然后打开微信扫一扫选择此图</p>
+</div>
 
 <script>
 
@@ -488,6 +498,10 @@ window.addEventListener('focus', function() {
     }
   }
 });
+
+// 点击二维码弹出全屏大图，方便长按保存
+function showQRModal() { document.getElementById('qrModal').classList.add('show'); }
+function hideQRModal() { document.getElementById('qrModal').classList.remove('show'); }
 
 // 一键解锁（扫码付款后点击）
 function redeemCodeDirect() {
