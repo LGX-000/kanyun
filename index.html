@@ -168,7 +168,10 @@ table.elem-table th{color:var(--text2);font-weight:400;font-size:.72rem}
 .vip-hint.success{color:var(--green)}
 .vip-hint.error{color:var(--red)}
 .vip-qr{display:block;width:200px;height:200px;margin:0 auto 16px;border-radius:12px;border:2px solid var(--border)}
-.vip-scan-hint{font-size:.78rem;color:var(--text2);margin-bottom:18px;text-align:center}
+.vip-scan-hint{font-size:.78rem;color:var(--text2);margin-bottom:4px;text-align:center}
+.vip-steps{text-align:left;margin:12px 0 8px;padding:0 4px}
+.vip-step{display:flex;align-items:center;gap:10px;font-size:.75rem;color:var(--text);margin-bottom:6px;line-height:1.4}
+.vip-step span{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center}
 footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
 
 @media(max-width:480px){
@@ -394,12 +397,18 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
       <div class="vip-icon">🔮</div>
       <h2 class="vip-title">大运运值预测</h2>
       <p class="vip-desc">十年大运 · 流年详解 · 运势曲线 · 阶段分析</p>
-      <div class="vip-price">1.00</div>
+      <div class="vip-price">0.99</div>
 
-      <p class="vip-scan-hint">前往爱发电完成支付，付款后返回解锁</p>
-      <button class="vip-pay-btn" id="goPayBtn" onclick="goToPay()">去支付</button>
-      <button class="vip-pay-btn" id="unlockBtn" style="display:none" onclick="redeemCodeDirect()">✓ 已完成支付，立即解锁</button>
-      <p class="vip-hint" id="vipHint">点击「去支付」跳转爱发电付款，付完返回即可解锁</p>
+      <img class="vip-qr" id="vipQR" src="收款码.png" alt="微信收款码" />
+	      <p class="vip-scan-hint">微信扫一扫付款，无需注册验证</p>
+	      <div class="vip-steps">
+	        <div class="vip-step"><span>1</span>截屏保存上方二维码</div>
+	        <div class="vip-step"><span>2</span>打开微信扫一扫，从相册选图</div>
+	        <div class="vip-step"><span>3</span>支付 ¥0.99 后返回本页面</div>
+	      </div>
+	      <button class="vip-pay-btn" id="goPayBtn" onclick="goToPay()">点此前往微信</button>
+	      <button class="vip-pay-btn" id="unlockBtn" style="display:none" onclick="redeemCodeDirect()">✓ 已完成支付，立即解锁</button>
+      <p class="vip-hint" id="vipHint">点击上方按钮后，按步骤操作即可解锁</p>
     </div>
   </div>
   <!-- Actual content (hidden until unlocked) -->
@@ -457,7 +466,7 @@ function goToPay() {
   document.getElementById('goPayBtn').style.display = 'none';
   document.getElementById('vipHint').textContent = '支付完成后返回本页面即可解锁';
   document.getElementById('vipHint').className = 'vip-hint';
-  window.open('https://ifdian.net/item/394705be496111f1957252540025c377', '_blank');
+  setTimeout(() => { window.location.href = 'weixin://'; }, 100);
 }
 // 监听页面可见性变化：用户从微信返回后显示解锁按钮
 document.addEventListener('visibilitychange', function() {
