@@ -148,7 +148,7 @@ table.elem-table th{color:var(--text2);font-weight:400;font-size:.72rem}
 .vip-gate{display:flex;justify-content:center;align-items:center;min-height:60vh;padding:20px 0}
 .vip-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px 28px;text-align:center;max-width:380px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.06)}
 .vip-icon{font-size:3rem;margin-bottom:12px}
-.vip-title{font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:.04em}
+.vip-title{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#d4a017,#b8860b,#f0c850);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;letter-spacing:.06em;text-shadow:none;filter:drop-shadow(0 2px 4px rgba(184,134,11,.3))}
 .vip-desc{font-size:.8rem;color:var(--text2);margin-bottom:20px;line-height:1.5}
 .vip-price{font-size:2.6rem;font-weight:900;color:var(--gold);margin-bottom:20px;letter-spacing:.04em}
 .vip-price::before{content:'¥';font-size:1.2rem;vertical-align:super}
@@ -391,9 +391,9 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
   <div class="vip-gate" id="vipGate">
     <div class="vip-card">
       <div class="vip-icon">🔮</div>
-      <h2 class="vip-title">解锁大运分析</h2>
+      <h2 class="vip-title">大运运值预测</h2>
       <p class="vip-desc">十年大运 · 流年详解 · 运势曲线 · 阶段分析</p>
-      <div class="vip-price">¥0.99</div>
+      <div class="vip-price">0.99</div>
       <img class="vip-qr" id="vipQR" src="收款码.png" alt="微信收款码" />
       <p class="vip-scan-hint">微信扫码支付 ¥0.99，支付完成后返回本页面</p>
       <button class="vip-pay-btn" id="goPayBtn" onclick="goToPay()">去微信支付</button>
