@@ -471,21 +471,25 @@ function goToPay() {
 // 监听页面可见性变化：用户从微信返回后显示解锁按钮
 document.addEventListener('visibilitychange', function() {
   if (!document.hidden && _paymentInitiated) {
-    var unlockBtn = document.getElementById('unlockBtn');
-    if (unlockBtn && unlockBtn.style.display === 'none') {
-      unlockBtn.style.display = 'block';
-      document.getElementById('vipHint').textContent = '欢迎回来！确认支付完成后点击下方按钮解锁';
-    }
+    setTimeout(function() {
+      var unlockBtn = document.getElementById('unlockBtn');
+      if (unlockBtn && unlockBtn.style.display === 'none') {
+        unlockBtn.style.display = 'block';
+        document.getElementById('vipHint').textContent = '欢迎回来！确认支付完成后点击下方按钮解锁';
+      }
+    }, 3000);
   }
 });
 // PC端备用：窗口重新获得焦点时也显示
 window.addEventListener('focus', function() {
   if (_paymentInitiated) {
-    var unlockBtn = document.getElementById('unlockBtn');
-    if (unlockBtn && unlockBtn.style.display === 'none') {
-      unlockBtn.style.display = 'block';
-      document.getElementById('vipHint').textContent = '欢迎回来！确认支付完成后点击下方按钮解锁';
-    }
+    setTimeout(function() {
+      var unlockBtn = document.getElementById('unlockBtn');
+      if (unlockBtn && unlockBtn.style.display === 'none') {
+        unlockBtn.style.display = 'block';
+        document.getElementById('vipHint').textContent = '欢迎回来！确认支付完成后点击下方按钮解锁';
+      }
+    }, 3000);
   }
 });
 
