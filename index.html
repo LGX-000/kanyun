@@ -164,7 +164,7 @@ table.elem-table th{color:var(--text2);font-weight:400;font-size:.72rem}
 .vip-code-btn:hover{border-color:var(--gold);color:var(--gold)}
 .vip-pay-btn{display:block;width:100%;padding:14px;margin-bottom:8px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.04em;transition:all .2s;box-shadow:0 2px 8px rgba(184,134,11,0.3)}
 .vip-pay-btn:hover{box-shadow:0 4px 14px rgba(184,134,11,0.45);transform:translateY(-1px)}
-.vip-hint{font-size:.68rem;color:var(--text2);line-height:1.5;margin-top:8px}.share-btn{display:block;width:100%;padding:14px 0;background:linear-gradient(135deg,#8b6914,#b8860b,#daa520);color:#fff;border:none;border-radius:12px;font-size:.88rem;font-weight:700;cursor:pointer;letter-spacing:.06em;font-family:inherit}
+.vip-hint{font-size:.68rem;color:var(--text2);line-height:1.5;margin-top:8px}
 .vip-hint.success{color:var(--green)}
 .vip-hint.error{color:var(--red)}
 .vip-qr{display:block;width:200px;height:200px;margin:0 auto 16px;border-radius:12px;border:2px solid var(--border)}
@@ -414,7 +414,6 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
   <!-- Actual content (hidden until unlocked) -->
   <div id="vipContent" style="display:none">
     <div class="section" id="dayunSection"></div>
-    <div style="text-align:center;padding:0;margin-bottom:16px"><button class="share-btn" onclick="generateShareCard()">📤 一键生成分享图</button></div>
   <div class="section" id="analysisFortune"></div>
   </div></div><!-- end vipContent -->
 </div><!-- end page3 -->
@@ -426,8 +425,6 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
 // ★ 将下面的链接替换为你自己的支付链接 ★
 const PAYMENT_URL = 'https://afdian.com/a/己庚';
 const RETURN_PARAM = 'code';  // 支付平台回调时 URL 中的验证码参数名
-var shareCardData = null;  // 分享图数据
-
 // 预置解锁码（支付成功后自动激活，也可手动发给用户）
 const UNLOCK_CODES = ['KANYUN2026', 'BAZI2026', 'MINGYUN2026'];
 
@@ -2030,243 +2027,7 @@ function calculate() {
   // Store trend data for drawing when user navigates to page 3
   trendDrawData = { scores: scoredDaYuns.map(sd => sd.sc.score), scoredDaYuns: scoredDaYuns };
 
-  shareCardData = {
-    name: name, gender: gender,
-    pillars: pillars, tenGods: tenGods,
-    score: newTotal, pattern: finalPatternName,
-    tier: tierResult.tier, tierComment: tierResult.comment,
-    elemCount: elemCount, dmElem: dmElem, dmName: dmName,
-    yongShen: yongResult.yongShen,
-    topFigure: top3[0],
-    bazi: userData.bazi,
-    dayun: scoredDaYuns.slice(0, 8)
-  };
-
   goPage(2);
-}
-
-
-// ==================== 一键生成分享图 ====================
-var SHARE_VERSES = {};
-SHARE_VERSES['杀印相生'] = '"杀印相生威自扬，木火通明照八荒"';
-SHARE_VERSES['食神吐秀'] = '"秀外慧中气自华，兰心蕙质映朝霞"';
-SHARE_VERSES['金白水清'] = '"金生丽水韵天成，渊深浩荡纳百川"';
-SHARE_VERSES['官印相生'] = '"官印相生德望重，芝兰玉树自生香"';
-SHARE_VERSES['财官双美'] = '"财官双美格局正，珠藏玉韫待春风"';
-SHARE_VERSES['食伤生财'] = '"食伤生财才气盛，点石成金运自通"';
-SHARE_VERSES['印绶'] = '"印绶护身文星照，腹有诗书气自华"';
-SHARE_VERSES['正官'] = '"正官清贵立朝堂，玉树临风品自芳"';
-SHARE_VERSES['七杀'] = '"七杀有制化为权，龙吟虎啸震山川"';
-SHARE_VERSES['食神'] = '"食神吐秀气清华，妙笔生花锦绣夸"';
-SHARE_VERSES['伤官'] = '"伤官才气冠群伦，笔走龙蛇泣鬼神"';
-SHARE_VERSES['建禄'] = '"建禄身强气自雄，根基深厚荫千重"';
-SHARE_VERSES['阳刃'] = '"阳刃锋芒不可当，金戈铁马镇四方"';
-SHARE_VERSES['从'] = '"弃命从强势自成，顺水行舟一日程"';
-SHARE_VERSES['化气'] = '"化气成形格不凡，阴阳和合转天关"';
-SHARE_VERSES['财格'] = '"财星得位富自天，珠玉满堂映日边"';
-
-function getShareVerse(pattern) {
-  for (var k in SHARE_VERSES) { if (pattern.indexOf(k) >= 0) return SHARE_VERSES[k]; }
-  return '"命格清奇品自高，风云际会话今朝"';
-}
-
-function generateShareCard() {
-  if (!shareCardData) { alert('请先计算八字后再生成分享图'); return; }
-  console.log('shareCardData:', shareCardData);
-  var d = shareCardData;
-  var p = d.pillars;
-  var STEMS = '甲乙丙丁戊己庚辛壬癸';
-  var BRANCHES = '子丑寅卯辰巳午未申酉戌亥';
-  var STEM_ELEM = {甲:'木',乙:'木',丙:'火',丁:'火',戊:'土',己:'土',庚:'金',辛:'金',壬:'水',癸:'水'};
-  var BRANCH_ELEM = {子:'水',丑:'土',寅:'木',卯:'木',辰:'土',巳:'火',午:'火',未:'土',申:'金',酉:'金',戌:'土',亥:'水'};
-  var STEM_YY = {甲:'阳',乙:'阴',丙:'阳',丁:'阴',戊:'阳',己:'阴',庚:'阳',辛:'阴',壬:'阳',癸:'阴'};
-  var ELEM_CSS = {木:'c1',火:'c2',土:'c3',金:'c4',水:'c5'};
-
-  var totalCount = 0;
-  var ec = {木:0,火:0,土:0,金:0,水:0};
-  for (var k in d.elemCount) { if (ec.hasOwnProperty(k)) { ec[k] = d.elemCount[k]; totalCount += d.elemCount[k]; } }
-  var maxElem = '木', maxVal = 0;
-  for (var k in ec) { var pct = Math.round(ec[k]/totalCount*100); ec[k] = pct; if (pct > maxVal) { maxVal = pct; maxElem = k; } }
-
-  var verse = getShareVerse(d.pattern);
-  var tierBadge = (d.score >= 90) ? '极品之上' : (d.score >= 80) ? '上等' : (d.score >= 65) ? '中等' : '平常';
-
-  // pillars HTML
-  var pillHTML = '';
-  for (var i = 0; i < 4; i++) {
-    var stem = STEMS[p[i].stem], branch = BRANCHES[p[i].branch];
-    var se = STEM_ELEM[stem], be = BRANCH_ELEM[branch];
-    var syy = STEM_YY[stem];
-    var isDM = p[i].isDayMaster;
-    pillHTML += '<div class="pillar' + (isDM ? ' day-master' : '') + '">';
-    if (!isDM) pillHTML += '<div class="pillar-label">' + p[i].label + '</div>';
-    pillHTML += '<div class="pillar-stem ' + ELEM_CSS[se] + '">' + stem + '</div>';
-    pillHTML += '<div class="pillar-branch ' + ELEM_CSS[be] + '">' + branch + '</div>';
-    pillHTML += '<div class="pillar-wx">' + se + '·' + syy + '</div></div>';
-  }
-
-  // figure match
-  var fig = d.topFigure;
-  var figStems = fig.bazi.stems, figBranches = fig.bazi.branches;
-  var figHTML = '';
-  for (var i = 0; i < 4; i++) {
-    var fse = STEM_ELEM[STEMS[figStems[i]]];
-    var fbe = BRANCH_ELEM[BRANCHES[figBranches[i]]];
-    figHTML += '<span class="' + ELEM_CSS[fse] + '">' + STEMS[figStems[i]] + '</span><span class="' + ELEM_CSS[fbe] + '">' + BRANCHES[figBranches[i]] + '</span>';
-    if (i < 3) figHTML += '&nbsp;&nbsp;';
-  }
-
-  var barW = Math.min(100, Math.round(d.score));
-
-  var cardHTML = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=750, initial-scale=1.0"><title>分享图</title><style>' +
-':root{--木:#4caf50;--火:#e74c3c;--土:#b8860b;--金:#daa520;--水:#4a90d9}' +
-'*{margin:0;padding:0;box-sizing:border-box}body{background:#e8e0d0}' +
-'.card{width:750px;min-height:1334px;margin:20px auto;overflow:hidden;font-family:"PingFang SC","Microsoft YaHei","Noto Serif SC",serif;background:linear-gradient(170deg,#f5efe4 0%,#faf6ef 35%,#f5f0e6 70%,#f0ebe0 100%);color:#3d3226;position:relative}' +
-'.card::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 20%,rgba(184,134,11,.1) 0%,transparent 50%),radial-gradient(ellipse 50% 40% at 70% 80%,rgba(160,130,80,.08) 0%,transparent 50%);background-image:linear-gradient(rgba(184,134,11,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(184,134,11,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}' +
-'.card-inner{position:relative;z-index:1;padding:50px 52px 40px;display:flex;flex-direction:column}' +
-'.top-label{text-align:center;font-size:13px;color:#b8860b;letter-spacing:.2em;margin-bottom:4px}' +
-'.title-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:2px}' +
-'.title{font-size:40px;font-weight:900;letter-spacing:.14em;background:linear-gradient(135deg,#8b6914,#b8860b,#daa520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}' +
-'.subtitle{text-align:center;font-size:15px;color:#8c7e6b;margin-top:6px;letter-spacing:.08em}' +
-'.divider{display:flex;align-items:center;gap:14px;margin:18px 0 14px}' +
-'.divider::before,.divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#ddd4c4,transparent)}' +
-'.divider span{font-size:11px;color:#8c7e6b;letter-spacing:.12em}' +
-'.pillars-box{background:#fff;border:1px solid #ddd4c4;border-radius:14px;padding:28px 8px 10px;margin-bottom:12px}' +
-'.pillars-row{display:flex;justify-content:center;gap:0;text-align:center;align-items:stretch}' +
-'.pillar{flex:1;position:relative;padding:0 10px 8px}' +
-'.pillar:not(:last-child)::after{content:"";position:absolute;right:0;top:8%;height:84%;width:1px;background:linear-gradient(180deg,transparent,#ddd4c4,transparent)}' +
-'.pillar-label{font-size:12px;color:#8c7e6b;margin-bottom:8px;letter-spacing:.06em}' +
-'.pillar-stem{font-size:38px;font-weight:800;line-height:1.15}' +
-'.pillar-branch{font-size:38px;font-weight:800;line-height:1.15}' +
-'.pillar-wx{font-size:11px;color:#8c7e6b;margin-top:6px}' +
-'.day-master{position:relative;border:2px solid #b8860b;border-radius:10px;background:rgba(184,134,11,.06);padding-top:18px}' +
-'.day-master::before{content:"日主";position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:10px;background:#b8860b;color:#fff;padding:2px 8px;border-radius:3px;white-space:nowrap;z-index:2}' +
-'.score-row{display:flex;gap:14px;margin-bottom:10px;align-items:stretch}' +
-'.score-card{flex:0 0 170px;background:#fff;border:1px solid #ddd4c4;border-radius:12px;padding:18px 12px;text-align:center}' +
-'.score-num{font-size:60px;font-weight:900;line-height:1;background:linear-gradient(135deg,#8b6914,#b8860b,#daa520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}' +
-'.title-badge{display:inline-block;padding:6px 18px;background:linear-gradient(135deg,#8b6914,#daa520);color:#fff;font-size:17px;font-weight:900;border-radius:6px;letter-spacing:.1em;box-shadow:0 2px 10px rgba(184,134,11,.35);margin-top:10px}' +
-'.score-bar{height:4px;background:#ddd4c4;border-radius:2px;margin-top:10px;overflow:hidden}' +
-'.score-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#8b6914,#daa520)}' +
-'.info-cards{flex:1;display:flex;flex-direction:column;gap:8px}' +
-'.info-item.verse-card{flex:1;background:#fff;border:1px solid #ddd4c4;border-radius:10px;padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:14px}' +
-'.info-item .lbl{flex-shrink:0;font-size:12px;color:#8c7e6b;letter-spacing:.06em;border:1px solid #ddd4c4;padding:4px 12px;border-radius:6px}' +
-'.verse-text{font-size:18px;color:#8b6914;line-height:1.8;letter-spacing:.06em;font-family:"Noto Serif SC",serif;font-weight:700}' +
-'.info-item.pattern-highlight{flex:1;background:linear-gradient(135deg,#fffef9,#fff,#fffef9);border:1px solid rgba(184,134,11,.3);border-radius:10px;padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:14px;box-shadow:0 0 20px rgba(218,165,32,.15),0 0 40px rgba(218,165,32,.08),inset 0 0 20px rgba(218,165,32,.04)}' +
-'.pattern-highlight .lbl{border:1px solid rgba(184,134,11,.25);color:#8b6914}' +
-'.pattern-highlight .val{font-size:24px;font-weight:900;letter-spacing:.12em;background:linear-gradient(135deg,#7a5a0a,#b8860b,#e8c840,#b8860b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}' +
-'.elem-row{display:flex;gap:0;margin-bottom:10px;background:#fff;border:1px solid #ddd4c4;border-radius:10px;overflow:hidden}' +
-'.elem{flex:1;text-align:center;padding:10px 6px;position:relative}' +
-'.elem:not(:last-child){border-right:1px solid #f0ebe0}' +
-'.elem .em{font-size:14px;font-weight:700}' +
-'.elem .eb{height:3px;border-radius:0;margin-top:4px}' +
-'.figure-section{background:#fff;border:1px solid #ddd4c4;border-radius:12px;padding:14px 20px;margin-bottom:10px}' +
-'.figure-title{font-size:13px;color:#b8860b;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}' +
-'.figure-title::before{content:"";width:5px;height:5px;border-radius:50%;background:#b8860b}' +
-'.figure-content{display:flex;align-items:center;gap:12px}' +
-'.figure-avatar{flex:0 0 44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f0ebe0,#ddd4c4);display:flex;align-items:center;justify-content:center;font-size:22px}' +
-'.figure-info{flex:1}' +
-'.figure-name{font-size:15px;font-weight:700;color:#3d3226}' +
-'.figure-name small{font-size:11px;color:#8c7e6b;font-weight:400;margin-left:6px}' +
-'.figure-bazi{font-size:16px;font-weight:700;margin-top:2px;letter-spacing:.06em}' +
-'.figure-sim{flex:0 0 64px;text-align:center}' +
-'.figure-sim-num{font-size:26px;font-weight:900;background:linear-gradient(135deg,#8b6914,#b8860b,#daa520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}' +
-'.figure-sim-label{font-size:10px;color:#8c7e6b;white-space:nowrap}' +
-'.trend-box{background:#fff;border:1px solid #ddd4c4;border-radius:12px;padding:18px 12px 10px;margin-bottom:auto}' +
-'.trend-title{font-size:13px;color:#b8860b;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}' +
-'.trend-title::before{content:"";width:5px;height:5px;border-radius:50%;background:#b8860b}' +
-'.trend-box canvas{width:100%;height:auto}' +
-'.footer-row{text-align:center;padding-top:10px;border-top:1px solid #ddd4c4;margin-top:10px}' +
-'.footer-url{font-size:13px;color:#8c7e6b;letter-spacing:.06em}' +
-'.footer-tip{font-size:10px;color:#b8a88c;margin-top:3px}' +
-'.c1{color:var(--木)}.c2{color:var(--火)}.c3{color:var(--土)}.c4{color:var(--金)}.c5{color:var(--水)}' +
-'</style></head><body><div class="card"><div class="card-inner">' +
-'<div class="top-label">传 统 干 支 文 化</div>' +
-'<div class="title-row"><div class="title">命 理 探 微</div></div>' +
-'<div class="subtitle">国学性格分析 · 仅供娱乐参考</div>' +
-'<div class="divider"><span>四 柱 排 盘</span></div>' +
-'<div class="pillars-box"><div class="pillars-row">' + pillHTML + '</div></div>' +
-'<div class="score-row"><div class="score-card"><div class="score-num">' + d.score + '</div><div class="score-bar"><div class="score-bar-fill" style="width:' + barW + '%"></div></div><div class="title-badge">' + tierBadge + '</div></div>' +
-'<div class="info-cards"><div class="info-item verse-card"><div class="lbl">判词</div><div class="verse-text">' + verse + '</div></div>' +
-'<div class="info-item pattern-highlight"><div class="lbl">格局</div><div class="val">' + d.pattern.split('').join(' ') + '</div></div></div></div>' +
-'<div class="elem-row">' +
-'<div class="elem"><div class="em c1">木 ' + ec['木'] + '%</div><div class="eb" style="background:var(--木);width:' + Math.round(ec['木']/maxVal*100) + '%"></div></div>' +
-'<div class="elem"><div class="em c2">火 ' + ec['火'] + '%</div><div class="eb" style="background:var(--火);width:' + Math.round(ec['火']/maxVal*100) + '%"></div></div>' +
-'<div class="elem"><div class="em c3">土 ' + ec['土'] + '%</div><div class="eb" style="background:var(--土);width:' + Math.round(ec['土']/maxVal*100) + '%"></div></div>' +
-'<div class="elem"><div class="em c4">金 ' + ec['金'] + '%</div><div class="eb" style="background:var(--金);width:' + Math.round(ec['金']/maxVal*100) + '%"></div></div>' +
-'<div class="elem"><div class="em c5">水 ' + ec['水'] + '%</div><div class="eb" style="background:var(--水);width:' + Math.round(ec['水']/maxVal*100) + '%"></div></div>' +
-'</div>' +
-'<div class="figure-section"><div class="figure-title">命格最相似的历史人物</div>' +
-'<div class="figure-content"><div class="figure-avatar">🏆</div><div class="figure-info"><div class="figure-name">' + fig.fig.name + ' <small>' + fig.fig.dynasty + '· ' + fig.fig.desc + '</small></div>' +
-'<div class="figure-bazi">' + figHTML + '</div></div>' +
-'<div class="figure-sim"><div class="figure-sim-num">' + fig.similarity + '%</div><div class="figure-sim-label">命格相似度</div></div></div></div>' +
-'<div class="trend-box"><div class="trend-title">大运运势曲线</div><canvas id="trendCanvas"></canvas></div>' +
-'<div class="footer-row"><div class="footer-url">勘运 · 传统干支性格分析</div><div class="footer-tip">内容仅供娱乐参考 · 请理性看待</div></div>' +
-'</div></div><script>' +
-'window.onload=function(){' +
-'var canvas=document.getElementById("trendCanvas");if(!canvas)return;' +
-'var ctx=canvas.getContext("2d");var dpr=window.devicePixelRatio||1;var W=640,H=300;' +
-'canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width="100%";canvas.style.height="auto";ctx.setTransform(dpr,0,0,dpr,0,0);' +
-'var pad={top:30,right:40,bottom:65,left:48};var ph=H-pad.top-pad.bottom;var pw=W-pad.left-pad.right;' +
-'ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);ctx.strokeStyle="#f0ebe0";ctx.lineWidth=1;' +
-'for(var i=0;i<=4;i++){var y=pad.top+ph/4*i;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(W-pad.right,y);ctx.stroke();}' +
-'ctx.fillStyle="#8c7e6b";ctx.font="9px \"PingFang SC\",\"Microsoft YaHei\",sans-serif";ctx.textAlign="right";' +
-'for(var i=0;i<=4;i++){ctx.fillText(String(100-i*20),pad.left-6,pad.top+ph/4*i+3);}' +
-'var STEMS="甲乙丙丁戊己庚辛壬癸";var BRANCHES="子丑寅卯辰巳午未申酉戌亥";' +
-'var SCL=["#4caf50","#4caf50","#e74c3c","#e74c3c","#b8860b","#b8860b","#daa520","#daa520","#4a90d9","#4a90d9"];' +
-'var BCL=["#4a90d9","#b8860b","#4caf50","#4caf50","#b8860b","#e74c3c","#e74c3c","#b8860b","#daa520","#daa520","#b8860b","#4a90d9"];' +
-'var scores=[' + d.dayun.map(function(dy){return dy.sc.score;}).join(',') + '];' +
-'var ages=[' + d.dayun.map(function(dy){return '"' + dy.dyItem.startAge + '-' + dy.dyItem.endAge + '"';}).join(',') + '];' +
-'var names=[' + d.dayun.map(function(dy){return '"' + STEMS[dy.dyItem.stem] + BRANCHES[dy.dyItem.branch] + '"';}).join(',') + '];' +
-'var curIdx=' + (function(){for(var i=0;i<d.dayun.length;i++){if(d.dayun[i].isCurrent)return i;}return Math.floor(d.dayun.length/2);})() + ';' +
-'var xStep=pw/(scores.length-1);' +
-'var grad=ctx.createLinearGradient(0,pad.top,0,H-pad.bottom);grad.addColorStop(0,"rgba(184,134,11,0.15)");grad.addColorStop(1,"rgba(184,134,11,0.01)");' +
-'ctx.beginPath();ctx.moveTo(pad.left,H-pad.bottom);' +
-'for(var i=0;i<scores.length;i++){ctx.lineTo(pad.left+xStep*i,pad.top+ph*(1-scores[i]/100));}' +
-'ctx.lineTo(pad.left+xStep*(scores.length-1),H-pad.bottom);ctx.closePath();ctx.fillStyle=grad;ctx.fill();' +
-'ctx.beginPath();ctx.strokeStyle="#b8860b";ctx.lineWidth=2.5;' +
-'for(var i=0;i<scores.length;i++){var x=pad.left+xStep*i,yv=pad.top+ph*(1-scores[i]/100);if(i===0)ctx.moveTo(x,yv);else ctx.lineTo(x,yv);}ctx.stroke();' +
-'for(var i=0;i<scores.length;i++){' +
-'var x=pad.left+xStep*i,yv=pad.top+ph*(1-scores[i]/100);var isCur=(i===curIdx);' +
-'ctx.beginPath();ctx.arc(x,yv,isCur?6:4,0,Math.PI*2);' +
-'ctx.fillStyle=isCur?"#b8860b":(scores[i]>=65?"#4a8c5c":scores[i]>=45?"#b8860b":"#c0392b");ctx.fill();' +
-'if(isCur){ctx.strokeStyle="#daa520";ctx.lineWidth=2;ctx.stroke();}' +
-'ctx.fillStyle="#3d3226";ctx.font=(isCur?"bold ":"")+"10px \"PingFang SC\",\"Microsoft YaHei\",sans-serif";ctx.textAlign="center";ctx.fillText(scores[i],x,yv-12);' +
-'ctx.fillStyle="#8c7e6b";ctx.font="9px \"PingFang SC\",\"Microsoft YaHei\",sans-serif";ctx.fillText(ages[i],x,H-pad.bottom+14);' +
-'var gz=names[i];var si=STEMS.indexOf(gz[0]);var bi=BRANCHES.indexOf(gz[1]);' +
-'ctx.fillStyle=SCL[si];ctx.font="bold 12px \"PingFang SC\",\"Microsoft YaHei\",sans-serif";ctx.fillText(gz[0],x-5,H-pad.bottom+32);' +
-'ctx.fillStyle=BCL[bi];ctx.fillText(gz[1],x+6,H-pad.bottom+32);' +
-'var rating=scores[i]>=90?"大吉之运":scores[i]>=80?"吉运":scores[i]>=65?"平稳之运":scores[i]>=45?"平平":"低谷";' +
-'ctx.fillStyle=isCur?"#b8860b":"#8c7e6b";ctx.font=(isCur?"bold ":"")+"9px \"PingFang SC\",\"Microsoft YaHei\",sans-serif";ctx.fillText(rating,x,H-pad.bottom+46);' +
-'}};' +
-'<\/script></body></html>';
-
-  // Remove existing overlay if any
-  var old = document.getElementById('shareOverlay');
-  if (old) old.remove();
-
-  var overlay = document.createElement('div');
-  overlay.id = 'shareOverlay';
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;overflow:auto';
-  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
-
-  var toolbar = document.createElement('div');
-  toolbar.style.cssText = 'background:#fff;padding:12px 20px;display:flex;gap:12px;align-items:center;position:sticky;top:0;z-index:1;border-bottom:1px solid #eee;width:100%;max-width:750px;box-sizing:border-box;box-shadow:0 2px 8px rgba(0,0,0,.1)';
-  toolbar.innerHTML = '<span style="font-weight:700;color:#b8860b;font-size:16px">分享图预览</span><span style="flex:1"></span>' +
-    '<button style="padding:8px 16px;background:#b8860b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;white-space:nowrap" onclick="var w=window.open();w.document.write(document.getElementById(\'shareFrame\').contentDocument.documentElement.outerHTML);w.document.close()">在新窗口打开</button>' +
-    '<button style="padding:8px 16px;background:#eee;color:#333;border:none;border-radius:6px;cursor:pointer;font-size:14px;white-space:nowrap" onclick="document.getElementById(\'shareOverlay\').remove()">关闭</button>';
-
-  var iframe = document.createElement('iframe');
-  iframe.id = 'shareFrame';
-  iframe.style.cssText = 'width:100%;max-width:750px;flex:1;border:none;min-height:100vh';
-
-  overlay.appendChild(toolbar);
-  overlay.appendChild(iframe);
-  document.body.appendChild(overlay);
-
-  var doc = iframe.contentDocument || iframe.contentWindow.document;
-  doc.open();
-  doc.write(cardHTML);
-  doc.close();
 }
 
 </script>
