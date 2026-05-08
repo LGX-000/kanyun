@@ -1963,49 +1963,93 @@ function calculate() {
                      sc.stemTG === '正财' || sc.stemTG === '偏财' ? '财星耗身' :
                      sc.stemTG === '正官' || sc.stemTG === '七杀' ? '官杀克身' : '';
 
-    // Element match analysis
-    let elemAdvice = '';
-    if (producing[dmElem] === stemElem) elemAdvice = '天干' + stemElem + '为生助日主之印星，利于学业、贵人、长辈扶持。';
-    else if (controlling[dmElem] === stemElem) elemAdvice = '天干' + stemElem + '为克制日主之官杀，事业压力增大，需注意健康与口舌是非。';
-    else if (dmElem === stemElem) elemAdvice = '天干与日主同五行，比劫相助，人缘增强，合作机会增多。';
-    else if (producing[stemElem] === dmElem) elemAdvice = '天干' + stemElem + '被日主所生（食伤），才华展现，利于创意、投资、表达。';
-    else elemAdvice = '天干' + stemElem + '被日主所克（财星），财运机会增多，但需量力而行，勿贪多求快。';
+    // Age groups
+	    const startAge = dy.startAge;
+	    const isChild = startAge < 15;
+	    const isTeen = startAge >= 15 && startAge < 22;
+	    const isYoungAdult = startAge >= 22 && startAge < 35;
+	    const isMiddleAge = startAge >= 35 && startAge < 55;
+	    const isElder = startAge >= 55;
 
-    // Branch interaction
-    let branchAdvice = '';
-    const liuChong = { 0:6,6:0,1:7,7:1,2:8,8:2,3:9,9:3,4:10,10:4,5:11,11:5 };
-    const liuHe = { 0:1,1:0,2:11,3:10,4:9,5:8,7:6,8:5,9:4,10:3,11:2 };
-    if (liuChong[dBr] === dy.branch) branchAdvice = '<span class="warn">⚠ 大运地支冲日支，此十年变动较大，注意感情、家庭、健康方面的波动，宜稳守不宜冒进。</span>';
-    else if (liuHe[dBr] === dy.branch) branchAdvice = '<span class="good">⊕ 大运地支合日支，此十年人缘佳，合作顺遂，感情婚姻有喜。</span>';
-    else if (liuChong[mBr] === dy.branch) branchAdvice = '<span class="warn">⚠ 大运地支冲月支提纲，事业环境变动大，注意职场变动与长辈健康。</span>';
-    else if (producing[dmElem] === branchElem) branchAdvice = '地支' + branchElem + '生扶日主，根基稳固，内在力量充足，宜夯实基础。';
-    else if (controlling[dmElem] === branchElem) branchAdvice = '地支' + branchElem + '克制日主，内在压力较大，注意身体健康，适时调整心态。';
-    else branchAdvice = '地支' + branchElem + '与日主五行互动平稳，内在状态较为稳定。';
+	    // Element match analysis
+	    let elemAdvice = '';
+	    if (producing[dmElem] === stemElem) {
+	      if (isChild) elemAdvice = '天干' + stemElem + '为生助日主之印星，此阶段利于学业进步、师长的赏识与帮助，是打好基础的时期。';
+	      else if (isTeen) elemAdvice = '天干' + stemElem + '为生助日主之印星，利于考学升学、技能积累，长辈与贵人的指点尤为关键。';
+	      else elemAdvice = '天干' + stemElem + '为生助日主之印星，利于学业、贵人、长辈扶持。';
+	    } else if (controlling[dmElem] === stemElem) {
+	      if (isChild) elemAdvice = '天干' + stemElem + '为克制日主之官杀，此阶段可能感到学业压力或师长要求较高，需注意劳逸结合。';
+	      else if (isTeen) elemAdvice = '天干' + stemElem + '为克制日主之官杀，升学或择业压力增大，需调节心态，注意身体健康。';
+	      else elemAdvice = '天干' + stemElem + '为克制日主之官杀，事业压力增大，需注意健康与口舌是非。';
+	    } else if (dmElem === stemElem) {
+	      if (isChild) elemAdvice = '天干与日主同五行，比劫相助，与同学伙伴关系融洽，一起成长的氛围良好。';
+	      else if (isTeen) elemAdvice = '天干与日主同五行，比劫相助，朋友缘好，适合参加社团活动、拓展人脉。';
+	      else elemAdvice = '天干与日主同五行，比劫相助，人缘增强，合作机会增多。';
+	    } else if (producing[stemElem] === dmElem) {
+	      if (isChild) elemAdvice = '天干' + stemElem + '被日主所生（食伤），此阶段好奇心旺盛，适合多参加兴趣班，发展爱好特长。';
+	      else if (isTeen) elemAdvice = '天干' + stemElem + '被日主所生（食伤），才华初显，适合展现自我、参加竞赛、尝试创作。';
+	      else elemAdvice = '天干' + stemElem + '被日主所生（食伤），才华展现，利于创意、投资、表达。';
+	    } else {
+	      if (isChild) elemAdvice = '天干' + stemElem + '被日主所克（财星），零花钱或小奖品机会增多，学会珍惜和管理，勿养成浪费习惯。';
+	      else if (isTeen) elemAdvice = '天干' + stemElem + '被日主所克（财星），求学期间可能有兼职或创业尝试，但需以学业为重，量力而行。';
+	      else elemAdvice = '天干' + stemElem + '被日主所克（财星），财运机会增多，但需量力而行，勿贪多求快。';
+	    }
 
-    // Ten god combo analysis
-    let tgAdvice = '';
-    if (stemNature === 'good' && branchNature === 'good') tgAdvice = '天干地支十神皆吉，此运整体顺遂，宜积极进取，把握时机。';
-    else if (stemNature === 'bad' && branchNature === 'bad') tgAdvice = '天干地支十神皆凶，此运挑战较多，宜低调行事，以守为主，修身养性。';
-    else if (stemNature === 'good') tgAdvice = '天干' + sc.stemTG + '为吉神，外在机遇较好，但地支助力不足，需内外兼顾。';
-    else tgAdvice = '地支' + sc.branchTG + '为吉神，内在运势尚可，但天干不利，外在表现需谨慎。';
+	    // Branch interaction
+	    let branchAdvice = '';
+	    const liuChong = { 0:6,6:0,1:7,7:1,2:8,8:2,3:9,9:3,4:10,10:4,5:11,11:5 };
+	    const liuHe = { 0:1,1:0,2:11,3:10,4:9,5:8,7:6,8:5,9:4,10:3,11:2 };
+	    if (liuChong[dBr] === dy.branch) {
+	      if (isChild || isTeen) branchAdvice = '<span class="warn">⚠ 大运地支冲日支，此十年家庭环境或学业环境可能有调整变动，注意与家人的沟通，保持情绪稳定。</span>';
+	      else branchAdvice = '<span class="warn">⚠ 大运地支冲日支，此十年变动较大，注意感情、家庭、健康方面的波动，宜稳守不宜冒进。</span>';
+	    } else if (liuHe[dBr] === dy.branch) {
+	      if (isChild || isTeen) branchAdvice = '<span class="good">⊕ 大运地支合日支，此十年人际关系融洽，家庭和睦，与朋友相处愉快，是温暖成长的时期。</span>';
+	      else branchAdvice = '<span class="good">⊕ 大运地支合日支，此十年人缘佳，合作顺遂，感情婚姻有喜。</span>';
+	    } else if (liuChong[mBr] === dy.branch) {
+	      if (isChild || isTeen) branchAdvice = '<span class="warn">⚠ 大运地支冲月支提纲，父母工作或家庭居住环境可能有变动，注意适应新环境。</span>';
+	      else branchAdvice = '<span class="warn">⚠ 大运地支冲月支提纲，事业环境变动大，注意职场变动与长辈健康。</span>';
+	    } else if (producing[dmElem] === branchElem) branchAdvice = '地支' + branchElem + '生扶日主，根基稳固，内在力量充足，宜夯实基础。';
+	    else if (controlling[dmElem] === branchElem) branchAdvice = '地支' + branchElem + '克制日主，内在压力较大，注意身体健康，适时调整心态。';
+	    else branchAdvice = '地支' + branchElem + '与日主五行互动平稳，内在状态较为稳定。';
 
-    // Age-based life context
-    let lifeContext = '';
-    const startAge = dy.startAge;
-    if (startAge < 20) lifeContext = '此运处于青少年时期，以学业、成长为主。';
-    else if (startAge < 35) lifeContext = '此运处于青壮年时期，事业起步、婚恋成家的关键阶段。';
-    else if (startAge < 50) lifeContext = '此运处于中年鼎盛期，事业发展的黄金阶段，家庭责任重大。';
-    else if (startAge < 65) lifeContext = '此运处于中晚年过渡期，事业渐稳，宜关注健康与家庭传承。';
-    else lifeContext = '此运处于晚年时期，宜颐养天年，关注健康，享受生活。';
+	    // Ten god combo analysis
+	    let tgAdvice = '';
+	    if (stemNature === 'good' && branchNature === 'good') {
+	      if (isChild) tgAdvice = '天干地支十神皆吉，此运成长环境良好，宜多学多看，培养良好习惯和品格。';
+	      else if (isTeen) tgAdvice = '天干地支十神皆吉，此运学业生活顺遂，宜大胆尝试、积累经验，为未来打好基础。';
+	      else tgAdvice = '天干地支十神皆吉，此运整体顺遂，宜积极进取，把握时机。';
+	    } else if (stemNature === 'bad' && branchNature === 'bad') {
+	      if (isChild) tgAdvice = '天干地支十神皆凶，此运成长中可能遇到一些小挫折，家长多引导和鼓励，是锻炼性格的好时机。';
+	      else if (isTeen) tgAdvice = '天干地支十神皆凶，此运挑战较多，宜将精力放在学业和自我提升上，不急于求成。';
+	      else tgAdvice = '天干地支十神皆凶，此运挑战较多，宜低调行事，以守为主，修身养性。';
+	    } else if (stemNature === 'good') tgAdvice = '天干' + sc.stemTG + '为吉神，外在机遇较好，但地支助力不足，需内外兼顾。';
+	    else tgAdvice = '地支' + sc.branchTG + '为吉神，内在运势尚可，但天干不利，外在表现需谨慎。';
 
-    // Practical advice
-    let practicalAdvice = '';
-    if (sc.score >= 65) practicalAdvice = '宜大胆开拓，积极投资，把握事业上升期，可适度冒险。';
-    else if (sc.score >= 55) practicalAdvice = '宜稳中求进，做好规划，按部就班推进事业与生活。';
-    else if (sc.score >= 40) practicalAdvice = '宜以守为主，减少不必要的变动与投资，积蓄力量等待时机。';
-    else practicalAdvice = '宜低调行事，谨慎决策，减少风险暴露，修身养性为上。';
+	    // Age-based life context
+	    let lifeContext = '';
+	    if (isChild) lifeContext = '此运处于童年及少年时期，以健康成长、学业基础为核心。';
+	    else if (isTeen) lifeContext = '此运处于青少年时期，以学业为重，兼顾兴趣培养与未来方向探索。';
+	    else if (isYoungAdult) lifeContext = '此运处于青壮年时期，事业起步、婚恋成家的关键阶段。';
+	    else if (isMiddleAge) lifeContext = '此运处于中年鼎盛期，事业发展的黄金阶段，家庭责任重大。';
+	    else if (isElder) lifeContext = '此运处中晚年，事业渐稳，宜关注健康与生活品质。';
+	    else lifeContext = '此运处于晚年时期，宜颐养天年，关注健康，享受生活。';
 
-    fortuneHTML += '<div class="period-card' + (isCurrent ? ' current' : '') + '">' +
+	    // Practical advice
+	    let practicalAdvice = '';
+	    if (isChild) {
+	      if (sc.score >= 65) practicalAdvice = '宜多尝试各类兴趣活动，培养学习习惯，建立自信和好奇心，家长可适度引导。';
+	      else if (sc.score >= 50) practicalAdvice = '宜注重基础学科的扎实学习，培养耐心和专注力，稳步成长。';
+	      else practicalAdvice = '家长宜多给予关爱和鼓励，不急于求成绩，培养健康的心理和体质是首要任务。';
+	    } else if (isTeen) {
+	      if (sc.score >= 65) practicalAdvice = '宜积极参加竞赛、社会实践和课外活动，拓宽视野，为升学或择业做准备。';
+	      else if (sc.score >= 50) practicalAdvice = '宜踏实学习，打好学业基础，按计划准备重要考试，不多分心。';
+	      else practicalAdvice = '宜专注学业，减少不必要的社交和娱乐干扰，耐心度过积累期。';
+	    } else {
+	      if (sc.score >= 65) practicalAdvice = '宜大胆开拓，积极投资，把握事业上升期，可适度冒险。';
+	      else if (sc.score >= 55) practicalAdvice = '宜稳中求进，做好规划，按部就班推进事业与生活。';
+	      else if (sc.score >= 40) practicalAdvice = '宜以守为主，减少不必要的变动与投资，积蓄力量等待时机。';
+	      else practicalAdvice = '宜低调行事，谨慎决策，减少风险暴露，修身养性为上。';
+	    }fortuneHTML += '<div class="period-card' + (isCurrent ? ' current' : '') + '">' +
       '<div class="period-header">' +
         '<span class="period-age">' + dy.startAge + ' - ' + dy.endAge + '岁 ' + STEMS[dy.stem] + BRANCHES[dy.branch] + (isCurrent ? ' 【当前大运】' : '') + '</span>' +
         '<span class="period-score" style="color:' + scoreColor + '">' + sc.score + '分 ' + sc.desc + '</span>' +
