@@ -434,13 +434,13 @@ const UNLOCK_CODES = ['KANYUN2026', 'BAZI2026', 'MINGYUN2026'];
 // 检查是否已解锁
 function isVIPUnlocked() {
   try {
-    const stored = localStorage.getItem('kanyun_vip_unlocked');
+    const stored = sessionStorage.getItem('kanyun_vip_unlocked');
     if (stored === 'true') return true;
     // 检查 URL 中是否有回调验证码
     const params = new URLSearchParams(window.location.search);
     const code = params.get(RETURN_PARAM);
     if (code && UNLOCK_CODES.includes(code.toUpperCase().trim())) {
-      localStorage.setItem('kanyun_vip_unlocked', 'true');
+      sessionStorage.setItem('kanyun_vip_unlocked', 'true');
       // 清除 URL 参数，保持干净
       if (window.history.replaceState) {
         window.history.replaceState({}, '', window.location.pathname);
@@ -523,7 +523,7 @@ function redeemCodeDirect() {
   const hint = document.getElementById('vipHint');
   hint.textContent = '✓ 解锁成功！正在加载大运分析...';
   hint.className = 'vip-hint success';
-  localStorage.setItem('kanyun_vip_unlocked', 'true');
+  sessionStorage.setItem('kanyun_vip_unlocked', 'true');
   setTimeout(() => {
     document.getElementById('vipGate').style.display = 'none';
     document.getElementById('vipContent').style.display = 'block';
@@ -539,7 +539,7 @@ function redeemCode() {
   const code = input.value.trim().toUpperCase();
   if (!code) { hint.textContent = '请输入解锁码'; hint.className = 'vip-hint error'; return; }
   if (UNLOCK_CODES.includes(code)) {
-    localStorage.setItem('kanyun_vip_unlocked', 'true');
+    sessionStorage.setItem('kanyun_vip_unlocked', 'true');
     hint.textContent = '✓ 解锁成功！正在加载大运分析...';
     hint.className = 'vip-hint success';
     setTimeout(() => {
