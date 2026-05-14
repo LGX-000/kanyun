@@ -402,13 +402,12 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
       <img class="vip-qr" id="vipQR" src="收款码.png" alt="微信收款码" onclick="saveQRToAlbum()" style="cursor:pointer" />
 	      <p class="vip-scan-hint">微信扫一扫付款，无需注册验证</p>
 	      <div class="vip-steps">
-	        <div class="vip-step"><span>1</span>点击上方二维码一键保存到相册</div>
-	        <div class="vip-step"><span>2</span>打开微信扫一扫，从相册选图</div>
-	        <div class="vip-step"><span>3</span>支付 ¥0.99 后返回本页面</div>
+	        <div class="vip-step"><span>1</span>长按扫描二维码</div>
+	        <div class="vip-step"><span>2</span>付款</div>
+	        <div class="vip-step"><span>3</span>返回页面</div>
 	      </div>
-	      <button class="vip-pay-btn" id="goPayBtn" onclick="goToPay()">点此前往微信</button>
-	      <button class="vip-pay-btn" id="unlockBtn" style="display:none" onclick="redeemCodeDirect()">✓ 已完成支付，立即解锁</button>
-      <p class="vip-hint" id="vipHint">点击上方按钮后，按步骤操作即可解锁</p>
+		      <button class="vip-pay-btn" id="unlockBtn" style="display:none" onclick="redeemCodeDirect()">✓ 已完成支付，立即解锁</button>
+      <p class="vip-hint" id="vipHint">付款后返回此页面即可自动解锁</p>
     </div>
   </div>
   <!-- Actual content (hidden until unlocked) -->
@@ -664,6 +663,7 @@ function goPage(n) {
     if (page3) page3.classList.add('active');
     document.getElementById('vipGate').style.display = 'flex';
     document.getElementById('vipContent').style.display = 'none';
+    _paymentInitiated = true;
     document.getElementById('stepNav').style.display = 'flex';
     document.querySelectorAll('.step-nav .step').forEach((s, i) => {
       s.classList.remove('active', 'done');
