@@ -1808,8 +1808,9 @@ function calculate() {
   const yongResult = assessYongShen(dSt, dBr, ySt, yBr, mSt, mBr, hSt, hBr, dmAssess.level);
   const clashScore = assessClashHarm(dSt, dBr, ySt, yBr, mSt, mBr, hSt, hBr);
   const combosScore = assessTenGodCombo(dSt, ySt, mSt, hSt);
-  let newTotal = finalPatternScore + yongResult.yongShenScore + dmAssess.score + clashScore + combosScore;
+  let newTotal = finalPatternScore + yongResult.yongShenScore + dmAssess.score + clashScore + combosScore + 10;
   if (special && special.isFull) { newTotal = Math.max(newTotal, 92); }
+  newTotal = Math.min(100, newTotal);
   const tierResult = special && special.isFull
     ? { tier: '极品', comment: special.comment }
     : getPatternTier(patternResult.patternName, newTotal, gender);
