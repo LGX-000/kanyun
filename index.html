@@ -661,6 +661,7 @@ function goPage(n) {
   // VIP check for page 2+3
   if ((n === 2 || n === 3) && !isVIPUnlocked()) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page3').classList.add('active');
     document.getElementById('vipGate').style.display = 'flex';
     document.getElementById('vipContent').style.display = 'none';
     _paymentInitiated = true;
@@ -2076,6 +2077,7 @@ function calculate() {
 
   // Show VIP gate instead of jumping to page 2
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page3').classList.add('active');
   document.getElementById('vipGate').style.display = 'flex';
   document.getElementById('vipContent').style.display = 'none';
   _paymentInitiated = true;
