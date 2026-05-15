@@ -416,8 +416,9 @@ footer{text-align:center;padding:20px;font-size:.68rem;color:var(--text2)}
   <div class="section" id="analysisFortune"></div>
   </div></div><!-- end vipContent -->
 </div><!-- end page3 -->
-<footer>命理之说，仅供娱乐参考 · 节气计算近似，±1日误差</footer>
+<footer>命理之说，仅供娱乐参考 · 节气计算近似，±1日误差<div style="margin-top:4px;font-size:.7rem;opacity:.7">累计访问 <span id="busuanzi_value_site_pv"></span> 次</div></footer>
 
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script>
 
 // ==================== VIP 付费系统 ====================
@@ -517,14 +518,15 @@ async function saveQRToAlbum() {
 // 一键解锁（扫码付款后点击）
 function redeemCodeDirect() {
   const hint = document.getElementById('vipHint');
-  hint.textContent = '✓ 解锁成功！正在加载大运分析...';
+  hint.textContent = '✓ 解锁成功！正在加载...';
   hint.className = 'vip-hint success';
   sessionStorage.setItem('kanyun_vip_unlocked', 'true');
   setTimeout(() => {
     document.getElementById('vipGate').style.display = 'none';
     document.getElementById('vipContent').style.display = 'block';
-    if (trendDrawData) { setTimeout(drawTrendChart, 200); }
+    document.getElementById('step2').textContent = '② 八字排盘';
     document.getElementById('step3').textContent = '③ 大运分析';
+    goPage(2);
   }, 600);
 }
 
@@ -656,27 +658,27 @@ function drawTrendChart() {
 
 
 function goPage(n) {
-  // VIP check for page 3
-  if (n === 3 && !isVIPUnlocked()) {
+  // VIP check for page 2+3
+  if ((n === 2 || n === 3) && !isVIPUnlocked()) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const page3 = document.getElementById('page3');
-    if (page3) page3.classList.add('active');
     document.getElementById('vipGate').style.display = 'flex';
     document.getElementById('vipContent').style.display = 'none';
     _paymentInitiated = true;
     document.getElementById('stepNav').style.display = 'flex';
     document.querySelectorAll('.step-nav .step').forEach((s, i) => {
       s.classList.remove('active', 'done');
-      if (i + 1 === 3) s.classList.add('active');
-      else if (i + 1 < 3) s.classList.add('done');
+      if (i + 1 === 1) s.classList.add('done');
+      if (i + 1 === 2) { s.classList.add('active'); s.textContent = '② 付费解锁'; }
+      if (i + 1 === 3) s.textContent = '③ 大运分析';
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
   // If VIP unlocked, show content
-  if (n === 3 && isVIPUnlocked()) {
+  if ((n === 2 || n === 3) && isVIPUnlocked()) {
     document.getElementById('vipGate').style.display = 'none';
     document.getElementById('vipContent').style.display = 'block';
+    document.getElementById('step2').textContent = '② 八字排盘';
     document.getElementById('step3').textContent = '③ 大运分析';
   }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -2072,7 +2074,19 @@ function calculate() {
   // Store trend data for drawing when user navigates to page 3
   trendDrawData = { scores: scoredDaYuns.map(sd => sd.sc.score), scoredDaYuns: scoredDaYuns };
 
-  goPage(2);
+  // Show VIP gate instead of jumping to page 2
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('vipGate').style.display = 'flex';
+  document.getElementById('vipContent').style.display = 'none';
+  _paymentInitiated = true;
+  document.getElementById('stepNav').style.display = 'flex';
+  document.querySelectorAll('.step-nav .step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i + 1 === 1) s.classList.add('done');
+    if (i + 1 === 2) { s.classList.add('active'); s.textContent = '② 付费解锁'; }
+    if (i + 1 === 3) s.textContent = '③ 大运分析';
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 </script>
